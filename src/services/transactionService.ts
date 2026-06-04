@@ -6,7 +6,7 @@ export async function getCategorySpend(
     endDate?: string
 ) {
     const values: any[] = [category];
-    const conditions = ["category = $1"];
+    const conditions = ["LOWER(category) = LOWER($1)"];
 
     if (startDate) {
         values.push(startDate);
@@ -29,4 +29,21 @@ export async function getCategorySpend(
     );
 
     return result.rows[0];
+}
+
+export async function getTopMerchants(limit = 10) {
+    const result = await pool.query(
+        `
+    SELECT
+      merchant_normalized,
+      ROUND(SUM(amount), 2) AS total_spent
+    FROM transactions
+    GROUP BY merchant_normalized
+    ORDER BY total_spent DESC
+    LIMIT $1
+    `,
+        [limit]
+    );
+
+    return result.rows;
 }

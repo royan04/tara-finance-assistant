@@ -1,5 +1,8 @@
 import { Agent } from "@mastra/core/agent";
 import { portfolioTool } from "../tools/portfolioTool";
+import { transactionTool } from "../tools/transactionTool";
+import { topMerchantsTool } from "../tools/topMerchantsTool";
+import { fundReturnTool } from "../tools/fundReturnTool";
 
 export const taraAgent = new Agent({
     id: "tara-agent",
@@ -23,5 +26,8 @@ Use tools whenever financial data is required.
 
     tools: {
         portfolioTool,
+        transactionTool,
+        topMerchantsTool,
+        fundReturnTool,
     },
 });
