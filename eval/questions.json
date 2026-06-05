@@ -1,0 +1,38 @@
+[
+    {
+        "question": "What is my current portfolio value?"
+    },
+    {
+        "question": "What was my biggest expense?"
+    },
+    {
+        "question": "Who are my top merchants?"
+    },
+    {
+        "question": "Which holding has the best realised return?"
+    },
+    {
+        "question": "Rank my holdings by return."
+    },
+    {
+        "question": "What was the return of fund_bluechip from 2024-01-01 to 2025-01-01?"
+    },
+    {
+        "question": "Which transactions look like recurring subscriptions?"
+    },
+    {
+        "question": "How much did I spend on food?"
+    },
+    {
+        "question": "How much did I spend on travel?"
+    },
+    {
+        "question": "What is my portfolio profit?"
+    },
+    {
+        "question": "Show my recurring payments."
+    },
+    {
+        "question": "What are my top 5 merchants?"
+    }
+]
