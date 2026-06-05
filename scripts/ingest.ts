@@ -6,9 +6,32 @@ import { pool } from "../src/db/postgres.js";
 dotenv.config();
 
 function normalizeMerchant(merchant: string): string {
-    return merchant
-        .toUpperCase()
-        .replace(/[^A-Z0-9 ]/g, "")
+
+    const upper = merchant.toUpperCase();
+
+    if (upper.includes("SWIGGY")) {
+        return "SWIGGY";
+    }
+
+    if (upper.includes("ZOMATO")) {
+        return "ZOMATO";
+    }
+
+    if (upper.includes("AMAZON")) {
+        return "AMAZON";
+    }
+
+    if (upper.includes("FLIPKART")) {
+        return "FLIPKART";
+    }
+
+    if (upper.includes("UBER")) {
+        return "UBER";
+    }
+
+    return upper
+        .replace(/[^A-Z0-9 ]/g, " ")
+        .replace(/\s+/g, " ")
         .trim()
         .split(" ")[0];
 }

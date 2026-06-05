@@ -1,0 +1,45 @@
+[
+  {
+    "question": "What is my current portfolio value?",
+    "answer": "Your current portfolio value is $119,983.80. The cost basis of your portfolio is $97,356.71, and you have a profit of $22,627.09."
+  },
+  {
+    "question": "What was my biggest expense?",
+    "answer": ""
+  },
+  {
+    "question": "Who are my top merchants?",
+    "answer": "Your top merchants are:\n\n1. AIR with a total spend of 830537.30\n2. INDIGO with a total spend of 609903.18\n3. SELF with a total spend of 605077.07\n4. NEFTSELFICICI with a total spend of 283202.41\n5. NEFTRENTHDFC with a total spend of 278602.08\n6. HDFC with a total spend of 193682.80\n7. TATA with a total spend of 167229.34\n8. AMAZONIN with a total spend of 160834.45\n9. AMAZON with a total spend of 135482.71\n10. CULTFIT with a total spend of 127016.72"
+  },
+  {
+    "question": "Which holding has the best realised return?",
+    "answer": "The holding with the best realised return is the Kestrel Emerging Growth Fund, with a return percentage of 67.24%."
+  },
+  {
+    "question": "Rank my holdings by return.",
+    "answer": "Your holdings ranked by return percentage are:\n\n1. Kestrel Emerging Growth Fund (67.24% return)\n2. Polaris Global Technology Fund (36.81% return)\n3. Saffron Bluechip Equity Fund (30.94% return)\n4. Sentinel Nifty Index Fund (18.48% return)\n5. Meridian Value Opportunities Fund (15.05% return)\n6. Apex Gold Savings Fund (13.53% return)\n7. Indigo Short Duration Debt Fund (10.11% return)\n8. Olive Tax Saver ELSS Fund (9.44% return)"
+  },
+  {
+    "question": "What was the return of fund_bluechip from 2024-01-01 to 2025-01-01?",
+    "answer": "The return of fund_bluechip from 2024-01-01 to 2025-01-01 is 31.17%."
+  },
+  {
+    "question": "Which transactions look like recurring subscriptions?"
+  },
+  {
+    "question": "How much did I spend on food?"
+  },
+  {
+    "question": "How much did I spend on travel?"
+  },
+  {
+    "question": "What is my portfolio profit?"
+  },
+  {
+    "question": "Show my recurring payments."
+  },
+  {
+    "question": "What are my top 5 merchants?",
+    "answer": "Your top 5 merchants are:\n\n1. AIR with a total spend of 830537.30\n2. INDIGO with a total spend of 609903.18\n3. SELF with a total spend of 605077.07\n4. NEFTSELFICICI with a total spend of 283202.41\n5. NEFTRENTHDFC with a total spend of 278602.08"
+  }
+]
