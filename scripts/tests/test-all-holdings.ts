@@ -1,5 +1,5 @@
 import { getAllHoldingReturns }
-    from "../src/services/holdingService";
+    from "../../src/services/holdingService";
 
 async function main() {
     const result =
