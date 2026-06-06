@@ -2,19 +2,31 @@
 
 ## Overview
 
-Tara Finance Assistant is an AI-powered financial analysis system built using Mastra, Groq, PostgreSQL, and TypeScript.
+Tara Finance Assistant is an AI-powered finance research agent built using TypeScript, Mastra, PostgreSQL, and Groq.
 
-The assistant allows users to ask natural language questions about:
+The system allows users to ask natural language questions about their financial data, including:
 
-* Portfolio performance
 * Spending analysis
+* Expense tracking
+* Merchant analysis
+* Portfolio performance
 * Mutual fund returns
 * Holding performance
-* Top merchants
-* Recurring transactions
-* Expense tracking
+* Recurring transaction detection
 
-All financial data is stored in PostgreSQL and accessed through tool-based retrieval rather than direct LLM access.
+All answers are grounded in PostgreSQL data through tool calls. The language model never directly accesses the database and is instructed not to invent values.
+
+---
+
+# Live Deployment
+
+Production URL:
+
+https://tara-finance-assistant-production.up.railway.app
+
+Public API Endpoint:
+
+POST https://tara-finance-assistant-production.up.railway.app/ask
 
 ---
 
@@ -24,31 +36,40 @@ All financial data is stored in PostgreSQL and accessed through tool-based retri
 * Node.js
 * Mastra
 * PostgreSQL
-* Groq (Llama 3.3 70B)
+* Groq
 * Zod
+* Railway
+
+---
+
+# Model Configuration
+
+Provider:
+
+Groq
+
+Model:
+
+groq/llama-3.3-70b-versatile
+
+Reason for selection:
+
+* Fast inference speed
+* Reliable tool calling
+* Strong reasoning performance
+* Suitable for structured financial question answering
 
 ---
 
 # Features
 
-## Portfolio Analytics
+## Spending Analysis
 
-* Current portfolio value
-* Cost basis
-* Profit calculation
+Supports:
 
-Example:
-
-```text
-What is my current portfolio value?
-```
-
----
-
-## Spending Analytics
-
-* Category-wise spending
-* Date-range spending
+* Total spending
+* Category spending
+* Date range filtering
 * Transfer exclusion
 * Biggest expense detection
 
@@ -60,19 +81,26 @@ How much did I spend on food?
 How much did I spend between Jan and Mar 2025?
 
 Ignore transfers. What was my spending in Q1 2025?
+
+What was my biggest expense?
 ```
 
 ---
 
 ## Merchant Analysis
 
+Supports:
+
 * Top merchants
-* Merchant alias normalization
+* Merchant normalization
+* Spending aggregation
 
 Examples:
 
 ```text
 Who are my top merchants?
+
+Which merchant do I spend the most money with?
 ```
 
 Merchant aliases are normalized during ingestion:
@@ -85,18 +113,52 @@ SWIGGY INSTAMART → SWIGGY
 
 ---
 
+## Portfolio Analytics
+
+Supports:
+
+* Portfolio value
+* Cost basis
+* Profit calculation
+
+Examples:
+
+```text
+What is my current portfolio value?
+
+How much profit have I made?
+```
+
+---
+
 ## Mutual Fund Analytics
 
-* Fund return between dates
-* Holding performance
-* Holding ranking
+Supports:
+
+* Fund returns
+* NAV analysis
+* Period return calculation
 
 Examples:
 
 ```text
 What was the return of fund_bluechip from 2024-01-01 to 2025-01-01?
+```
 
-Which holding has the best realised return?
+---
+
+## Holding Analytics
+
+Supports:
+
+* Holding performance
+* Return ranking
+* Best-performing holding
+
+Examples:
+
+```text
+Which holding has the highest return?
 
 Rank my holdings by return.
 ```
@@ -105,12 +167,42 @@ Rank my holdings by return.
 
 ## Recurring Transaction Detection
 
+Supports:
+
+* Subscription detection
+* Recurring payment identification
+
 Examples:
 
 ```text
-Show my recurring payments.
+Show my recurring transactions.
 
-Which transactions look like recurring subscriptions?
+Which merchants appear repeatedly?
+```
+
+---
+
+# Architecture
+
+```text
+User
+  │
+  ▼
+POST /ask
+  │
+  ▼
+Tara Agent (Mastra)
+  │
+  ├── transactionTool
+  ├── portfolioTool
+  ├── topMerchantsTool
+  ├── fundReturnTool
+  ├── biggestExpenseTool
+  ├── holdingReturnsTool
+  └── recurringTransactionsTool
+  │
+  ▼
+PostgreSQL
 ```
 
 ---
@@ -118,7 +210,7 @@ Which transactions look like recurring subscriptions?
 # Project Structure
 
 ```text
-tara-finance-agent
+tara-finance-assistant
 │
 ├── README.md
 ├── DESIGN.md
@@ -145,7 +237,8 @@ tara-finance-agent
 │   ├── sample_b
 │   └── sample_c
 │
-└── .agents
+└── docs
+    └── screenshots
 ```
 
 ---
@@ -154,9 +247,9 @@ tara-finance-agent
 
 ## transactions
 
-Stores transaction history.
+Stores financial transactions.
 
-Fields:
+Columns:
 
 * id
 * date
@@ -173,7 +266,7 @@ Fields:
 
 Stores mutual fund metadata.
 
-Fields:
+Columns:
 
 * fund_id
 * fund_name
@@ -185,8 +278,9 @@ Fields:
 
 Stores historical NAV values.
 
-Fields:
+Columns:
 
+* id
 * fund_id
 * nav_date
 * nav
@@ -195,10 +289,11 @@ Fields:
 
 ## holdings
 
-Stores owned mutual fund units.
+Stores owned fund units.
 
-Fields:
+Columns:
 
+* id
 * fund_id
 * units
 * purchase_date
@@ -206,25 +301,27 @@ Fields:
 
 ---
 
-# Setup Instructions
+# Local PostgreSQL Setup
 
-## 1. Install Dependencies
+Database Name:
 
-```bash
-npm install
+provue_tara
+
+PostgreSQL Version:
+
+18
+
+Local Connection Example:
+
+```text
+postgresql://postgres:<password>@localhost:5432/provue_tara
 ```
+
+The project was developed and tested locally using PostgreSQL before deployment to Railway PostgreSQL.
 
 ---
 
-## 2. Create PostgreSQL Database
-
-```sql
-CREATE DATABASE provue_tara;
-```
-
----
-
-## 3. Configure Environment Variables
+# Environment Variables
 
 Create a `.env` file:
 
@@ -234,11 +331,37 @@ DATABASE_URL=postgresql://postgres:<password>@localhost:5432/provue_tara
 DATA_DIR=./data/sample_a
 
 GROQ_API_KEY=<your_groq_api_key>
+
+PORT=8080
 ```
 
 ---
 
-## 4. Load Dataset
+# Installation
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+# Database Setup
+
+Create the database:
+
+```sql
+CREATE DATABASE provue_tara;
+```
+
+Create the schema using the SQL provided in the project.
+
+---
+
+# Data Ingestion
+
+Load the sample dataset:
 
 ```bash
 npx tsx scripts/ingest.ts
@@ -250,60 +373,59 @@ Expected output:
 Loading data from: ./data/sample_a
 Connected to PostgreSQL
 Old data cleared
-Inserted 1500 transactions
-Inserted 8 funds
-Inserted 8 holdings
+Inserted transactions
+Inserted funds
+Inserted holdings
 Ingestion completed
 ```
 
 ---
 
-# Running the Application
+# Running Locally
 
-Start the Mastra development server:
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-The application will be available at:
+Mastra Studio:
 
 ```text
-Studio: http://localhost:4111
+http://localhost:4111
+```
 
-API: http://localhost:4111/api
+Mastra API:
+
+```text
+http://localhost:4111/api
 ```
 
 ---
 
-# API Usage
+# Public API
 
-## Generate Response
+## POST /ask
 
 Endpoint:
 
 ```http
-POST /api/agents/tara-agent/generate
+POST /ask
 ```
 
-Example Request:
+Request:
 
 ```json
 {
-  "messages": [
-    {
-      "role": "user",
-      "content": "What is my current portfolio value?"
-    }
-  ]
+  "question": "What is my biggest expense?"
 }
 ```
 
-Example Response:
+Response:
 
 ```json
 {
-  "text": "Your current portfolio value is $119,983.80."
+  "answer": "Your biggest expense is rent, with a total amount of 34774.89."
 }
 ```
 
@@ -311,17 +433,27 @@ Example Response:
 
 # Evaluation
 
-Run evaluation questions:
+Run the evaluation suite:
 
 ```bash
 npx tsx scripts/run-eval.ts
 ```
 
-Results will be written to:
+Output:
 
 ```text
 eval/results.json
 ```
+
+The evaluation framework verifies:
+
+* Spending calculations
+* Merchant analysis
+* Portfolio calculations
+* Fund returns
+* Holding returns
+* Recurring transaction detection
+* No-data handling
 
 ---
 
@@ -351,10 +483,11 @@ What was the return of fund_bluechip from 2024-01-01 to 2025-01-01?
 
 # Assumptions
 
-* Transaction data is available in the provided dataset.
+* Transaction data is provided through the supplied datasets.
 * Dates are stored in ISO format.
 * Merchant aliases are normalized during ingestion.
 * Portfolio calculations use the latest available NAV.
+* Transfer transactions can be excluded when requested.
 
 ---
 
@@ -362,8 +495,17 @@ What was the return of fund_bluechip from 2024-01-01 to 2025-01-01?
 
 * Multi-user support
 * Authentication and authorization
-* Portfolio forecasting
 * Real-time market data integration
-* Dashboard UI
-* Advanced subscription detection
+* Portfolio forecasting
+* Web dashboard UI
+* Advanced recurring payment detection
 * Investment recommendation engine
+
+---
+
+
+# Deployment
+
+Railway:
+
+https://tara-finance-assistant-production.up.railway.app
